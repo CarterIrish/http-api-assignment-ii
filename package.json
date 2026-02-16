@@ -1,0 +1,29 @@
+{
+  "name": "http-api-assignment-ii",
+  "version": "1.0.0",
+  "description": "http api assignment for RIT IGME-430",
+  "homepage": "https://github.com/CarterIrish/http-api-assignment-ii#readme",
+  "bugs": {
+    "url": "https://github.com/CarterIrish/http-api-assignment-ii/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarterIrish/http-api-assignment-ii.git"
+  },
+  "license": "MIT",
+  "author": "Carter Irish",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests completed successfully!\" && exit 0",
+    "start": "node src/server.js",
+    "dev": "nodemon --watch src --watch client -e js,html,css --delay 500ms src/server.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
+    "nodemon": "^3.1.11"
+  }
+}

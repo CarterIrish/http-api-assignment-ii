@@ -1,36 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Our simple HTTP server</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
+
   <script>
 
+    const sendPost = async (nameForm) => {
+      const name = nameForm.querySelector("#nameField").value;
+      const age = nameForm.querySelector("#ageField").value;
+      const content = document.querySelector("#content");
+
+      let formData = `name=${name}&age=${age}`;
+
+      const response = await fetch('/addUser', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": formData.length,
+        },
+        body: formData
+      });
+      console.log(response.status);
+      switch (response.status) {
+        case 400:
+          {
+            const json = await response.json();
+            content.innerHTML =
+              `
+            <h1>Bad Request</h1>
+            <p>Message: ${json.message}</p>
+            `;
+            break;
+          }
+        case 201:
+          {
+            const json = await response.json();
+            content.innerHTML = `
+            <h1>Created</h1>
+            <p>Message: ${json.message}</p>
+            `;
+            break;
+          }
+        case 204:
+          {
+            content.innerHTML =
+              `
+            <h1>Updated (No Content)</h1>
+            `;
+            break;
+          }
+      }
+    }
+
+    const sendGet = async (e) => {
+      const url = document.querySelector("#urlField").value;
+      const method = document.querySelector("#methodSelect").value;
+      const content = document.querySelector("#content");
+
+      const response = await fetch(url, { method: method });
+      console.log(method);
+      if (method === "head") {
+        console.log(method);
+        content.innerHTML = (response.ok) ? `<h1>Success: ${response.status}</h1>` : `<h1>Not Found: ${response.status}</h1>`;
+      }
+      else{
+        const responseJSON = await response.json();
+        console.log(JSON.stringify(responseJSON));
+        switch(response.status)
+        {
+          case 200:
+            {
+              content.innerHTML =
+              `
+              <h1>Success</h1>
+              <p>${JSON.stringify(responseJSON)}</p>
+              `;
+              break;
+            }
+          case 404:
+            {
+              content.innerHTML = 
+              `
+              <h1>Not Found: </h1>
+              <p>${responseJSON.message}</p>
+              `;
+              break;
+            }
+        }
+      }
+
+    }
+
+    const init = () => {
+      const nameForm = document.querySelector("#nameForm");
+      const userForm = document.querySelector("#userForm");
+      const content = document.querySelector('#content');
+
+      const addUser = (e) => {
+        e.preventDefault();
+        sendPost(nameForm);
+      }
+      const getUser = (e) => {
+        e.preventDefault();
+        sendGet(userForm);
+      }
+
+      nameForm.addEventListener('submit', addUser);
+      userForm.addEventListener('submit', getUser);
+    }
+    window.onload = init;
   </script>
 </head>
+
 <body>
   <section id="top">
     <h3>POST Status Code Tests</h3>
+
+
     <form id="nameForm" action="/addUser" method="post">
+
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
+
       <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1" />
+
       <input type="submit" value="Add User" />
     </form>
+
+
     <form id="userForm" action="/getUsers" method="get">
+
       <select id='urlField'>
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
       </select>
+
       <select id="methodSelect">
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
+
       <input type="submit" value="Get User" />
     </form>
   </section>
   <section id="content">
   </section>
 </body>
+
 </html>
