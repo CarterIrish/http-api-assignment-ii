@@ -1,5 +1,10 @@
 const users = {};
 
+/**
+ * Sends a 404 Not Found JSON response. Omits the body for HEAD requests.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ */
 const notFound = (request, response) => {
     const responseJSON = {
         message: "The page you are looking for was not found.",
@@ -12,6 +17,13 @@ const notFound = (request, response) => {
     response.end();
 }
 
+/**
+ * Handles POST requests to add or update a user.
+ * Returns 400 if name or age is missing, 204 if updating an existing user,
+ * or 201 if creating a new user.
+ * @param {object} request - The HTTP request object with parsed body.
+ * @param {object} response - The HTTP response object.
+ */
 const addUser = (request, response) => {
     const { name, age } = request.body;
     if (!name || !age) {
@@ -33,6 +45,11 @@ const addUser = (request, response) => {
     }
 }
 
+/**
+ * Returns all users as JSON with a 200 status. Omits the body for HEAD requests.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ */
 const getUsers = (request, response) => {
     response.writeHead(200, { "Content-Type": "application/json" });
     if (request.method !== "HEAD") {

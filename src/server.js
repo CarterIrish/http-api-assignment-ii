@@ -1,3 +1,9 @@
+/**
+ * @author Carter Irish
+ * @purpose HTTP API server for managing users via GET, HEAD, and POST requests. Part of the http-api-assignment-ii at RIT
+ * @date 2/15/2026
+ */
+
 const http = require('http');
 const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
@@ -12,6 +18,13 @@ const urlStruct = {
     '/notFound': jsonHandler.notFound
 }
 
+/**
+ * Reassembles the request body from chunks, parses it as URL-encoded data,
+ * and attaches it to request.body before calling the handler.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ * @param {function} handler - The callback to invoke after body is parsed.
+ */
 const parseBody = (request, response, handler) => {
     const body = [];
 
@@ -32,6 +45,12 @@ const parseBody = (request, response, handler) => {
     });
 };
 
+/**
+ * Routes incoming requests to the appropriate handler based on
+ * the HTTP method and URL pathname.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ */
 const onRequest = (request, response) => {
     console.log(request.url);
     const parsedURL = new URL(request.url, `http://${request.headers.host}`);

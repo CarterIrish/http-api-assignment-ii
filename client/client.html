@@ -6,7 +6,6 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
 
   <script>
-
     const sendPost = async (nameForm) => {
       const name = nameForm.querySelector("#nameField").value;
       const age = nameForm.querySelector("#ageField").value;
@@ -16,13 +15,9 @@
 
       const response = await fetch('/addUser', {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Content-Length": formData.length,
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData
       });
-      console.log(response.status);
       switch (response.status) {
         case 400:
           {
@@ -60,30 +55,26 @@
       const content = document.querySelector("#content");
 
       const response = await fetch(url, { method: method });
-      console.log(method);
       if (method === "head") {
-        console.log(method);
         content.innerHTML = (response.ok) ? `<h1>Success: ${response.status}</h1>` : `<h1>Not Found: ${response.status}</h1>`;
       }
-      else{
+      else {
         const responseJSON = await response.json();
-        console.log(JSON.stringify(responseJSON));
-        switch(response.status)
-        {
+        switch (response.status) {
           case 200:
             {
               content.innerHTML =
-              `
+                `
               <h1>Success</h1>
-              <p>${JSON.stringify(responseJSON)}</p>
+              <p>${JSON.stringify(responseJSON.users)}</p>
               `;
               break;
             }
           case 404:
             {
-              content.innerHTML = 
-              `
-              <h1>Not Found: </h1>
+              content.innerHTML =
+                `
+              <h1>Not Found</h1>
               <p>${responseJSON.message}</p>
               `;
               break;

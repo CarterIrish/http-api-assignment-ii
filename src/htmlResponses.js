@@ -3,6 +3,11 @@ const fs = require('fs');
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
+/**
+ * Serves the client.html page as the home page.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ */
 const getIndex = (request, response) =>
 {
     response.writeHead(200, { "Content-Type" : "text/html" })
@@ -10,6 +15,11 @@ const getIndex = (request, response) =>
     response.end();
 }
 
+/**
+ * Serves the style.css file as text/css.
+ * @param {object} request - The HTTP request object.
+ * @param {object} response - The HTTP response object.
+ */
 const getCSS = (request, response) =>
 {
     response.writeHead(200, { "Content-Type" : "text/css" });
